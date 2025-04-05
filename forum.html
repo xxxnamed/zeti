@@ -32,7 +32,7 @@
       max-width: 400px;
       width: 100%;
       padding: 20px;
-      background-color: #fff;
+      background-color: #f0f0f0; /* Серый фон */
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
@@ -80,8 +80,9 @@
     /* Новые анимации */
     @keyframes initialPulse {
       0% { border-color: #ffc0c0; }
-      33% { border-color: red; }
-      66% { border-color: red; }
+      25% { border-color: red; }
+      50% { border-color: red; }
+      75% { border-color: red; }
       100% { border-color: #ffc0c0; }
     }
 
@@ -92,11 +93,11 @@
     }
 
     .initial-error {
-      animation: initialPulse 2s forwards;
+      animation: initialPulse 3s forwards;
     }
 
     .validation-error {
-      animation: validationPulse 2s forwards;
+      animation: validationPulse 3s forwards;
     }
 
     .soft-red {
@@ -166,6 +167,7 @@
     const leaveDialog = document.getElementById('leave-dialog');
     let formChanged = false;
     let isDialogOpen = false;
+    let errorTimers = {}; // Для отслеживания времени для каждого поля
 
     const isValid = field =>
       field.type === 'email' 
