@@ -14,9 +14,9 @@
   <main>
     <form action="https://formsubmit.co/your-email@example.com" method="POST">
       <!-- Поля ввода с placeholder-ами согласно требованиям -->
-      <input type="text" id="name" name="name" placeholder="Напишите ваше имя" required><br><br>
-      <input type="email" id="email" name="email" placeholder="Напишите Андрес электронной почты" required><br><br>
-      <textarea id="message" name="message" placeholder="Напишите сообщение" required></textarea><br><br>
+      <input type="text" id="name" name="name" placeholder="Ваше имя" required><br><br>
+      <input type="email" id="email" name="email" placeholder="Адрес электронной почты" required><br><br>
+      <textarea id="message" name="message" placeholder="Сообщение" required></textarea><br><br>
       
       <input type="hidden" name="_next" value="thank-you.html">
       <input type="hidden" name="_captcha" value="false">
@@ -24,6 +24,7 @@
       <button type="submit">Отправить</button>
     </form>
   </main>
+  
   <!-- Скрипт для кастомизации сообщений об ошибках с задержкой 0.5 сек -->
   <script>
     document.addEventListener('DOMContentLoaded', function(){
@@ -55,6 +56,7 @@
         }
         errorSpan.textContent = message;
         errorSpan.style.display = 'block';
+        field.style.borderColor = 'red'; // Подсветка поля красным
       }
 
       function hideError(field) {
@@ -63,30 +65,31 @@
           errorSpan.textContent = '';
           errorSpan.style.display = 'none';
         }
+        field.style.borderColor = ''; // Убираем подсветку после корректного ввода
       }
 
       nameField.addEventListener('input', function(){
-        validateField(nameField, 'name', 'Напишите ваше имя');
+        validateField(nameField, 'name', 'Заполните поле с вашим именем');
       });
       emailField.addEventListener('input', function(){
-        validateField(emailField, 'email', 'Напишите Андрес электронной почты');
+        validateField(emailField, 'email', 'В адресе электронной почты должен быть символ "@"');
       });
       messageField.addEventListener('input', function(){
-        validateField(messageField, 'message', 'Напишите сообщение');
+        validateField(messageField, 'message', 'Заполните поле с сообщением');
       });
 
       form.addEventListener('submit', function(e){
         let valid = true;
         if(!nameField.value.trim()){
-          showError(nameField, 'Напишите ваше имя');
+          showError(nameField, 'Заполните поле с вашим именем');
           valid = false;
         }
         if(!emailField.value.includes('@')){
-          showError(emailField, 'Напишите Андрес электронной почты');
+          showError(emailField, 'В адресе электронной почты должен быть символ "@"');
           valid = false;
         }
         if(!messageField.value.trim()){
-          showError(messageField, 'Напишите сообщение');
+          showError(messageField, 'Заполните поле с сообщением');
           valid = false;
         }
         if(!valid){
