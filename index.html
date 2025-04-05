@@ -8,13 +8,13 @@
 </head>
 <body>
   <header>
-    <!-- Верхняя надпись изменена, шрифт стал меньше -->
+    <!-- Верхняя надпись (фоновый цвет темнее, текст по центру) -->
     <h1>Zeti - ваш трекер</h1>
   </header>
   
   <main>
     <section class="content">
-      <!-- Контент выравнен по левому краю -->
+      <!-- Остальной контент выравнен по левому краю -->
       <p>Информация появится позже</p>
       <a href="about.html">О проекте</a>
       <br>
@@ -24,7 +24,7 @@
     <section class="contact-form">
       <h2>Форма обратной связи</h2>
       <form action="https://formsubmit.co/your-email@example.com" method="POST">
-        <!-- Убираем отдельные надписи над полями, текст теперь в placeholder -->
+        <!-- Надписи перенесены в placeholder -->
         <input type="text" id="name" name="name" placeholder="Напишите ваше имя" required><br><br>
         <input type="email" id="email" name="email" placeholder="Напишите Андрес электронной почты" required><br><br>
         <textarea id="message" name="message" placeholder="Напишите сообщение" required></textarea><br><br>
@@ -61,6 +61,7 @@
 
       function showError(field, message) {
         let errorSpan = field.nextElementSibling;
+        // Если сообщение об ошибке уже есть, обновляем текст, чтобы не было дублирования
         if(!errorSpan || !errorSpan.classList.contains('error-message')){
           errorSpan = document.createElement('span');
           errorSpan.className = 'error-message';
