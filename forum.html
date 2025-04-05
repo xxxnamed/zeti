@@ -80,15 +80,14 @@
     /* Новые анимации */
     @keyframes initialPulse {
       0% { border-color: #ffc0c0; }
-      25% { border-color: red; }
-      75% { border-color: red; }
+      33% { border-color: red; }
+      66% { border-color: red; }
       100% { border-color: #ffc0c0; }
     }
 
     @keyframes validationPulse {
       0% { border-color: #ffc0c0; }
-      25% { border-color: red; }
-      75% { border-color: red; }
+      50% { border-color: red; }
       100% { border-color: #ffc0c0; }
     }
 
@@ -98,6 +97,10 @@
 
     .validation-error {
       animation: validationPulse 2s forwards;
+    }
+
+    .soft-red {
+      border-color: #ffc0c0 !important;
     }
 
     dialog::backdrop {
@@ -171,18 +174,26 @@
 
     fields.forEach(field => {
       field.addEventListener('input', () => {
-        if (!formChanged && field.value.trim() !== '') formChanged = true;
-        field.dataset.changed = true;
+        const trimmedValue = field.value.trim();
+        const wasEmpty = !field.dataset.changed && trimmedValue === '';
         
-        if (field.value.trim() === '') {
+        if (!formChanged && trimmedValue !== '') formChanged = true;
+        field.dataset.changed = trimmedValue !== '';
+        
+        if (trimmedValue === '') {
           field.classList.add('soft-red');
+          if (wasEmpty) {
+            field.classList.add('initial-error');
+          } else {
+            field.classList.remove('initial-error');
+          }
         } else {
-          field.classList.remove('soft-red');
+          field.classList.remove('soft-red', 'initial-error');
         }
       });
 
       field.addEventListener('blur', () => {
-        if (field.value.trim() === '') {
+        if (field.value.trim() === '' && !field.classList.contains('initial-error')) {
           field.classList.add('soft-red');
         }
       });
@@ -198,13 +209,11 @@
           const isFieldEmpty = field.value.trim() === '';
           const isFieldNotChanged = !field.dataset.changed;
 
-          // Удаляем предыдущие анимации
           field.classList.remove('initial-error', 'validation-error');
 
           if (isFieldEmpty && isFieldNotChanged) {
             field.classList.add('initial-error');
           } else {
-            field.classList.add('soft-red');
             field.classList.add('validation-error');
           }
         }
@@ -236,7 +245,6 @@
 
     function handleLeave() {
       window.removeEventListener('beforeunload', handleBeforeUnload);
-      isDialogOpen = false;
       window.location.href = 'about:blank';
     }
 
