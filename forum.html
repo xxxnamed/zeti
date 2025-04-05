@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="ru">
+<!DOCTYPE html><html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -13,21 +12,18 @@
       background-color: #000;
       font-family: sans-serif;
     }
-
     header {
       text-align: center;
       padding: 20px;
       background-color: #222;
       color: #fff;
     }
-
     main {
       display: flex;
       align-items: center;
       justify-content: center;
       height: calc(100vh - 80px);
     }
-
     form {
       display: flex;
       flex-direction: column;
@@ -39,7 +35,6 @@
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
-
     input, textarea {
       padding: 12px;
       font-size: 16px;
@@ -47,26 +42,18 @@
       box-sizing: border-box;
       border: 2px solid #ccc;
       border-radius: 8px;
-      transition: border-color 0.3s ease;
       outline: none;
+      transition: border-color 0.5s ease;
     }
-
-    input:focus, textarea:focus {
-      outline: none;
-      box-shadow: none;
-    }
-
     textarea {
       height: 150px;
       resize: vertical;
     }
-
     .button-wrapper {
       display: flex;
       justify-content: center;
       width: 100%;
     }
-
     button {
       padding: 10px 16px;
       font-size: 15px;
@@ -78,27 +65,51 @@
       transition: background-color 0.3s ease, transform 0.1s ease;
       user-select: none;
     }
-
     button:hover {
       background-color: #d0ebff;
     }
-
     button:active {
       background-color: #bfe3ff;
       transform: scale(0.97);
     }
-
-    button:focus-visible {
-      outline: none;
-      box-shadow: none;
-    }
-
     button:focus {
       outline: none;
     }
-
-    .highlight-error {
+    .soft-red {
+      border-color: #ffc0c0 !important;
+    }
+    .strong-red {
       border-color: red !important;
+      transition: border-color 0.5s ease;
+    }
+    dialog::backdrop {
+      background: rgba(0, 0, 0, 0.5);
+    }
+    dialog {
+      border: none;
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 320px;
+      text-align: center;
+    }
+    .dialog-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    .dialog-buttons button {
+      flex: 1;
+      margin: 0 5px;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .stay-button {
+      background-color: #e0e0e0;
+    }
+    .leave-button {
+      background-color: #ffcccc;
     }
   </style>
 </head>
@@ -114,61 +125,77 @@
       <input type="hidden" name="_next" value="thank-you.html">
       <input type="hidden" name="_captcha" value="false">
       <div class="button-wrapper">
-        <button type="submit"
-          oncopy="return false;"
-          ondragstart="return false;"
-          onselectstart="return false;"
-          onmousedown="return false;"
-        >отправить</button>
+        <button type="submit" oncopy="return false;" ondragstart="return false;" onselectstart="return false;">отправить</button>
       </div>
     </form>
   </main>
+  <dialog id="leave-dialog">
+    <p style="font-weight:bold">Покинуть эту страницу?</p>
+    <p>Изменения могут не сохраниться</p>
+    <div class="dialog-buttons">
+      <button class="stay-button" onclick="document.getElementById('leave-dialog').close()">Остаться</button>
+      <button class="leave-button" id="confirm-leave">Покинуть</button>
+    </div>
+  </dialog>
   <script>
     const form = document.getElementById('feedback-form');
     const fields = ['name', 'email', 'message'].map(id => document.getElementById(id));
-    let formChanged = false;
+    let formChanged = false;const isValid = (field) => field.type === 'email' ? field.value.includes('@') : field.value.trim() !== '';
 
-    fields.forEach(field => {
-      field.addEventListener('input', () => {
-        formChanged = true;
-        if (!field.value.trim() || (field.type === 'email' && !field.value.includes('@'))) {
-          field.style.borderColor = "#ff0000";
-        } else {
-          field.style.borderColor = "#ccc";
-        }
-      });
+fields.forEach(field => {
+  let lastValue = '';
+  field.addEventListener('input', () => {
+    if (!formChanged && field.value.trim() !== '') formChanged = true;
 
-      field.addEventListener('blur', () => {
-        if (!field.value.trim() || (field.type === 'email' && !field.value.includes('@'))) {
-          field.style.borderColor = "#ff0000";
-        } else {
-          field.style.borderColor = "#ccc";
-        }
-      });
-    });
+    if (field.value.trim() === '') {
+      field.classList.add('soft-red');
+    } else {
+      field.classList.remove('soft-red');
+    }
+  });
 
-    form.addEventListener('submit', function(e) {
-      let valid = true;
-      fields.forEach(field => {
-        if (!field.value.trim() || (field.type === 'email' && !field.value.includes('@'))) {
-          valid = false;
-          field.classList.add('highlight-error');
-          setTimeout(() => {
-            field.classList.remove('highlight-error');
-          }, 1000);
-        }
-      });
-      if (!valid) {
-        e.preventDefault();
-      }
-    });
+  field.addEventListener('blur', () => {
+    if (field.value.trim() === '') {
+      field.classList.add('soft-red');
+    }
+  });
+});
 
-    window.addEventListener('beforeunload', function (e) {
-      if (formChanged) {
-        e.preventDefault();
-        e.returnValue = 'Вы уверены, что хотите уйти? Все введённые данные будут удалены.';
-      }
-    });
+form.addEventListener('submit', function(e) {
+  let valid = true;
+  fields.forEach(field => {
+    if (!isValid(field)) {
+      valid = false;
+      field.classList.remove('soft-red');
+      field.classList.add('strong-red');
+      setTimeout(() => {
+        field.classList.remove('strong-red');
+        field.classList.add('soft-red');
+      }, 1000);
+    }
+  });
+  if (!valid) e.preventDefault();
+});
+
+let shouldPrompt = () => fields.some(f => f.value.trim() !== '');
+let showDialog = false;
+
+window.addEventListener('beforeunload', function (e) {
+  if (shouldPrompt()) {
+    e.preventDefault();
+    document.getElementById('leave-dialog').showModal();
+    showDialog = true;
+    return '';
+  }
+});
+
+document.getElementById('confirm-leave').addEventListener('click', () => {
+  showDialog = false;
+  document.getElementById('leave-dialog').close();
+  window.removeEventListener('beforeunload', () => {});
+  location.reload();
+});
+
   </script>
 </body>
 </html>
