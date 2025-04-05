@@ -6,45 +6,55 @@
   <title>Написать отзыв</title>
   <link rel="stylesheet" href="style.css">
   <style>
+    /* Центрирование формы по вертикали */
+    main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: calc(100vh - 80px); /* вычитаем высоту шапки */
+    }
     form {
       display: flex;
       flex-direction: column;
-      gap: 20px; /* Увеличено расстояние между полями */
-      max-width: 400px; /* Максимальная ширина формы */
-      margin: 0 auto; /* Центрируем форму */
+      gap: 20px; /* расстояние между полями */
+      max-width: 400px;
+      width: 100%;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
-
     input, textarea {
       padding: 12px;
       font-size: 16px;
       width: 100%;
       box-sizing: border-box;
+      border: 2px solid #ccc;
+      border-radius: 4px;
+      transition: border-color 1s ease;
     }
-
     textarea {
-      height: 150px; /* Добавлена высота для текстового поля */
-      resize: vertical; /* Можно изменять размер только по вертикали */
+      height: 150px;
+      resize: vertical;
     }
-
     .button-wrapper {
       display: flex;
       justify-content: center;
       width: 100%;
     }
-
     button {
       padding: 12px 20px;
       font-size: 16px;
-      background-color: #4CAF50; /* Зеленый фон */
+      background-color: #4CAF50;
       color: white;
       border: none;
+      border-radius: 4px;
       cursor: pointer;
-      width: 100%; /* Кнопка будет растягиваться на всю ширину */
+      width: 100%;
       transition: background-color 0.3s ease;
     }
-
     button:hover {
-      background-color: #45a049; /* Темно-зеленый при наведении */
+      background-color: #45a049;
     }
   </style>
 </head>
@@ -70,7 +80,7 @@
     </form>
   </main>
 
-  <!-- Скрипт для кастомизации сообщений об ошибках с задержкой 0.5 сек -->
+  <!-- Скрипт для плавного изменения цвета рамки поля при отсутствии ввода с задержкой 1 сек -->
   <script>
     document.addEventListener('DOMContentLoaded', function(){
       let form = document.querySelector('form');
@@ -78,66 +88,54 @@
       let emailField = document.getElementById('email');
       let messageField = document.getElementById('message');
 
-      // Таймеры для задержки проверки
+      // Таймеры для задержки проверки (1 секунда)
       let timers = { name: null, email: null, message: null };
 
-      function validateField(field, timerKey, errorMessage) {
+      function validateField(field, timerKey) {
         clearTimeout(timers[timerKey]);
         timers[timerKey] = setTimeout(function(){
-          if(!field.value.trim()){
-            showError(field, errorMessage);
+          if (!field.value.trim() || (field.id === 'email' && !field.value.includes('@'))) {
+            showError(field);
           } else {
             hideError(field);
           }
-        }, 500);
+        }, 1000);
       }
 
-      function showError(field, message) {
-        let errorSpan = field.nextElementSibling;
-        if(!errorSpan || !errorSpan.classList.contains('error-message')){
-          errorSpan = document.createElement('span');
-          errorSpan.className = 'error-message';
-          field.parentNode.insertBefore(errorSpan, field.nextSibling);
-        }
-        errorSpan.textContent = message;
-        errorSpan.style.display = 'block';
-        field.style.borderColor = 'red'; // Подсветка поля красным
+      function showError(field) {
+        // Плавный переход благодаря CSS (transition)
+        field.style.borderColor = "#ff9999"; // нежное красное
       }
 
       function hideError(field) {
-        let errorSpan = field.nextElementSibling;
-        if(errorSpan && errorSpan.classList.contains('error-message')){
-          errorSpan.textContent = '';
-          errorSpan.style.display = 'none';
-        }
-        field.style.borderColor = ''; // Убираем подсветку после корректного ввода
+        field.style.borderColor = "#ccc"; // исходный цвет рамки
       }
 
       nameField.addEventListener('input', function(){
-        validateField(nameField, 'name', 'Заполните поле с вашим именем');
+        validateField(nameField, 'name');
       });
       emailField.addEventListener('input', function(){
-        validateField(emailField, 'email', 'В адресе электронной почты должен быть символ "@"');
+        validateField(emailField, 'email');
       });
       messageField.addEventListener('input', function(){
-        validateField(messageField, 'message', 'Заполните поле с сообщением');
+        validateField(messageField, 'message');
       });
 
       form.addEventListener('submit', function(e){
         let valid = true;
-        if(!nameField.value.trim()){
-          showError(nameField, 'Заполните поле с вашим именем');
+        if (!nameField.value.trim()) {
+          showError(nameField);
           valid = false;
         }
-        if(!emailField.value.includes('@')){
-          showError(emailField, 'В адресе электронной почты должен быть символ "@"');
+        if (!emailField.value.trim() || !emailField.value.includes('@')) {
+          showError(emailField);
           valid = false;
         }
-        if(!messageField.value.trim()){
-          showError(messageField, 'Заполните поле с сообщением');
+        if (!messageField.value.trim()) {
+          showError(messageField);
           valid = false;
         }
-        if(!valid){
+        if (!valid) {
           e.preventDefault();
         }
       });
