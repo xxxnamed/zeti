@@ -4,15 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Написать отзыв</title>
-  <link rel="stylesheet" href="style.css">
   <style>
-    /* Сбрасываем отступы и запрещаем скроллинг */
+    /* Сбрасываем отступы, запрещаем скроллинг и задаем черный фон */
     html, body {
       margin: 0;
       padding: 0;
       height: 100vh;
       overflow: hidden;
-      background-color: #000; /* полностью черный фон */
+      background-color: #000;
     }
     /* Стили для шапки */
     header {
@@ -45,7 +44,7 @@
       width: 100%;
       box-sizing: border-box;
       border: 2px solid #ccc;
-      border-radius: 4px;
+      border-radius: 8px; /* более гладкие края */
       transition: border-color 0.5s ease;
     }
     textarea {
@@ -63,13 +62,17 @@
       background-color: #4CAF50;
       color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: 8px; /* более гладкие края */
       cursor: pointer;
       width: 100%;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s ease, transform 0.1s ease;
     }
     button:hover {
       background-color: #45a049;
+    }
+    button:active {
+      background-color: #3e8e41;
+      transform: scale(0.98);
     }
   </style>
 </head>
@@ -90,7 +93,7 @@
       
       <!-- Обертка для кнопки отправки формы -->
       <div class="button-wrapper">
-        <button type="submit">Отправить</button>
+        <button type="submit">отправить</button>
       </div>
     </form>
   </main>
@@ -118,7 +121,6 @@
       }
 
       function showError(field) {
-        // Плавный переход благодаря CSS (transition)
         field.style.borderColor = "#ff9999"; // нежное красное
       }
 
@@ -126,6 +128,7 @@
         field.style.borderColor = "#ccc"; // исходный цвет рамки
       }
 
+      // Вешаем обработчики событий input и blur для корректной валидации
       nameField.addEventListener('input', function(){
         validateField(nameField, 'name');
       });
@@ -133,6 +136,16 @@
         validateField(emailField, 'email');
       });
       messageField.addEventListener('input', function(){
+        validateField(messageField, 'message');
+      });
+      
+      nameField.addEventListener('blur', function(){
+        validateField(nameField, 'name');
+      });
+      emailField.addEventListener('blur', function(){
+        validateField(emailField, 'email');
+      });
+      messageField.addEventListener('blur', function(){
         validateField(messageField, 'message');
       });
 
