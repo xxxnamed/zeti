@@ -1,33 +1,65 @@
+/* Основные стили страницы */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  /* Фон ниже верхней надписи полностью чёрный */
+  background-color: #000;
+  color: #fff;
 }
 
+/* Стили для верхнего блока */
 header {
-    background-color: #333;
-    color: white;
-    padding: 10px 0;
-    text-align: center;
+  /* Фон верхней надписи – темнее */
+  background-color: #222;
+  padding: 10px 0;
+  text-align: center;
 }
 
+header h1 {
+  font-size: 24px; /* Более мелкий шрифт для надписи */
+  margin: 0;
+}
+
+/* Основной контент выравнивается по левому краю */
 main {
-    margin: 20px;
-    text-align: center;
+  margin: 20px;
+  text-align: left;
 }
 
 a {
-    color: #333;
-    text-decoration: none;
-    font-size: 18px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
 }
 
 a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
-iframe {
-    margin: 20px auto;
-    display: block;
+/* Оформление кнопки отправки как ссылки */
+button[type="submit"] {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* Стили для полей ввода и текстовой области */
+input, textarea {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+/* Стили для сообщения об ошибке */
+.error-message {
+  color: red;
+  font-size: 14px;
+  display: none;
 }
