@@ -32,7 +32,7 @@
       max-width: 400px;
       width: 100%;
       padding: 20px;
-      background-color: #f0f0f0; /* Серый фон */
+      background-color: #333; /* Темно-серый фон */
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
@@ -170,18 +170,18 @@
     let errorTimers = {}; // Для отслеживания времени для каждого поля
 
     const isValid = field =>
-      field.type === 'email' 
-        ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value.trim()) 
+      field.type === 'email'
+        ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value.trim())
         : field.value.trim() !== '';
 
     fields.forEach(field => {
       field.addEventListener('input', () => {
         const trimmedValue = field.value.trim();
         const wasEmpty = !field.dataset.changed && trimmedValue === '';
-        
+          
         if (!formChanged && trimmedValue !== '') formChanged = true;
         field.dataset.changed = trimmedValue !== '';
-        
+          
         if (trimmedValue === '') {
           field.classList.add('soft-red');
           if (wasEmpty) {
