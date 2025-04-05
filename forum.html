@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Написать отзыв</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <!-- Шапка с заголовком страницы формы -->
+    <h1>Написать отзыв</h1>
+  </header>
+  <main>
+    <form action="https://formsubmit.co/your-email@example.com" method="POST">
+      <!-- Поля ввода с placeholder-ами согласно требованиям -->
+      <input type="text" id="name" name="name" placeholder="Напишите ваше имя" required><br><br>
+      <input type="email" id="email" name="email" placeholder="Напишите Андрес электронной почты" required><br><br>
+      <textarea id="message" name="message" placeholder="Напишите сообщение" required></textarea><br><br>
+      
+      <input type="hidden" name="_next" value="thank-you.html">
+      <input type="hidden" name="_captcha" value="false">
+      <!-- Кнопка отправки оформлена как ссылка -->
+      <button type="submit">Отправить</button>
+    </form>
+  </main>
+  <!-- Скрипт для кастомизации сообщений об ошибках с задержкой 0.5 сек -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){
+      let form = document.querySelector('form');
+      let nameField = document.getElementById('name');
+      let emailField = document.getElementById('email');
+      let messageField = document.getElementById('message');
+
+      // Таймеры для задержки проверки
+      let timers = { name: null, email: null, message: null };
+
+      function validateField(field, timerKey, errorMessage) {
+        clearTimeout(timers[timerKey]);
+        timers[timerKey] = setTimeout(function(){
+          if(!field.value.trim()){
+            showError(field, errorMessage);
+          } else {
+            hideError(field);
+          }
+        }, 500);
+      }
+
+      function showError(field, message) {
+        let errorSpan = field.nextElementSibling;
+        if(!errorSpan || !errorSpan.classList.contains('error-message')){
+          errorSpan = document.createElement('span');
+          errorSpan.className = 'error-message';
+          field.parentNode.insertBefore(errorSpan, field.nextSibling);
+        }
+        errorSpan.textContent = message;
+        errorSpan.style.display = 'block';
+      }
+
+      function hideError(field) {
+        let errorSpan = field.nextElementSibling;
+        if(errorSpan && errorSpan.classList.contains('error-message')){
+          errorSpan.textContent = '';
+          errorSpan.style.display = 'none';
+        }
+      }
+
+      nameField.addEventListener('input', function(){
+        validateField(nameField, 'name', 'Напишите ваше имя');
+      });
+      emailField.addEventListener('input', function(){
+        validateField(emailField, 'email', 'Напишите Андрес электронной почты');
+      });
+      messageField.addEventListener('input', function(){
+        validateField(messageField, 'message', 'Напишите сообщение');
+      });
+
+      form.addEventListener('submit', function(e){
+        let valid = true;
+        if(!nameField.value.trim()){
+          showError(nameField, 'Напишите ваше имя');
+          valid = false;
+        }
+        if(!emailField.value.includes('@')){
+          showError(emailField, 'Напишите Андрес электронной почты');
+          valid = false;
+        }
+        if(!messageField.value.trim()){
+          showError(messageField, 'Напишите сообщение');
+          valid = false;
+        }
+        if(!valid){
+          e.preventDefault();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
