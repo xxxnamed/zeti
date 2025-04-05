@@ -8,106 +8,19 @@
 </head>
 <body>
   <header>
-    <!-- Верхняя надпись (фоновый цвет темнее, текст по центру) -->
+    <!-- Верхняя надпись с центровкой -->
     <h1>Zeti - ваш трекер</h1>
   </header>
-  
   <main>
     <section class="content">
-      <!-- Остальной контент выравнен по левому краю -->
+      <!-- Контент выровнен по левому краю -->
       <p>Информация появится позже</p>
       <a href="about.html">О проекте</a>
       <br>
+      <a href="forum.html">Написать отзыв</a>
+      <br>
       <a href="https://github.com/your-username/my-repository/releases" target="_blank">Скачать приложение</a>
     </section>
-
-    <section class="contact-form">
-      <h2>Форма обратной связи</h2>
-      <form action="https://formsubmit.co/your-email@example.com" method="POST">
-        <!-- Надписи перенесены в placeholder -->
-        <input type="text" id="name" name="name" placeholder="Напишите ваше имя" required><br><br>
-        <input type="email" id="email" name="email" placeholder="Напишите Андрес электронной почты" required><br><br>
-        <textarea id="message" name="message" placeholder="Напишите сообщение" required></textarea><br><br>
-        
-        <input type="hidden" name="_next" value="https://your-website.com/thank-you.html">
-        <input type="hidden" name="_captcha" value="false">
-        <!-- Кнопка отправки оформлена как ссылка -->
-        <button type="submit">Отправить</button>
-      </form>
-    </section>
   </main>
-
-  <!-- Скрипт для кастомизации сообщений об ошибках с задержкой 0.5 сек -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function(){
-      let form = document.querySelector('.contact-form form');
-      let nameField = document.getElementById('name');
-      let emailField = document.getElementById('email');
-      let messageField = document.getElementById('message');
-
-      // Таймеры для задержки проверки
-      let timers = { name: null, email: null, message: null };
-
-      function validateField(field, timerKey, errorMessage) {
-        clearTimeout(timers[timerKey]);
-        timers[timerKey] = setTimeout(function(){
-          if(!field.value.trim()){
-            showError(field, errorMessage);
-          } else {
-            hideError(field);
-          }
-        }, 500);
-      }
-
-      function showError(field, message) {
-        let errorSpan = field.nextElementSibling;
-        // Если сообщение об ошибке уже есть, обновляем текст, чтобы не было дублирования
-        if(!errorSpan || !errorSpan.classList.contains('error-message')){
-          errorSpan = document.createElement('span');
-          errorSpan.className = 'error-message';
-          field.parentNode.insertBefore(errorSpan, field.nextSibling);
-        }
-        errorSpan.textContent = message;
-        errorSpan.style.display = 'block';
-      }
-
-      function hideError(field) {
-        let errorSpan = field.nextElementSibling;
-        if(errorSpan && errorSpan.classList.contains('error-message')){
-          errorSpan.textContent = '';
-          errorSpan.style.display = 'none';
-        }
-      }
-
-      nameField.addEventListener('input', function(){
-        validateField(nameField, 'name', 'Напишите ваше имя');
-      });
-      emailField.addEventListener('input', function(){
-        validateField(emailField, 'email', 'Напишите Андрес электронной почты');
-      });
-      messageField.addEventListener('input', function(){
-        validateField(messageField, 'message', 'Напишите сообщение');
-      });
-
-      form.addEventListener('submit', function(e){
-        let valid = true;
-        if(!nameField.value.trim()){
-          showError(nameField, 'Напишите ваше имя');
-          valid = false;
-        }
-        if(!emailField.value.includes('@')){
-          showError(emailField, 'Напишите Андрес электронной почты');
-          valid = false;
-        }
-        if(!messageField.value.trim()){
-          showError(messageField, 'Напишите сообщение');
-          valid = false;
-        }
-        if(!valid){
-          e.preventDefault();
-        }
-      });
-    });
-  </script>
 </body>
 </html>
