@@ -76,24 +76,29 @@
     button:focus {
       outline: none;
     }
-    .soft-red {
-      border-color: #ffc0c0 !important;
-      animation: softToStrong 2s forwards;
-    }
-    .strong-red {
-      border-color: red !important;
-      animation: strongPulse 2s forwards;
-    }
-    @keyframes softToStrong {
+
+    /* Новые анимации */
+    @keyframes initialPulse {
       0% { border-color: #ffc0c0; }
       50% { border-color: red; }
       100% { border-color: #ffc0c0; }
     }
-    @keyframes strongPulse {
-      0% { border-color: red; }
-      50% { border-color: red; }
+
+    @keyframes validationPulse {
+      0% { border-color: #ffc0c0; }
+      33% { border-color: red; }
+      66% { border-color: red; }
       100% { border-color: #ffc0c0; }
     }
+
+    .initial-error {
+      animation: initialPulse 2s forwards;
+    }
+
+    .validation-error {
+      animation: validationPulse 2s forwards;
+    }
+
     dialog::backdrop {
       background: rgba(0, 0, 0, 0.5);
     }
@@ -192,14 +197,13 @@
           const isFieldEmpty = field.value.trim() === '';
           const isFieldNotChanged = !field.dataset.changed;
 
+          // Удаляем предыдущие анимации
+          field.classList.remove('initial-error', 'validation-error');
+
           if (isFieldEmpty && isFieldNotChanged) {
-            field.classList.add('soft-red');
-            setTimeout(() => {
-              field.classList.add('strong-red');
-            }, 500);
+            field.classList.add('initial-error');
           } else {
-            field.classList.remove('soft-red');
-            field.classList.add('strong-red');
+            field.classList.add('validation-error');
           }
         }
       });
@@ -213,6 +217,7 @@
     function handleBeforeUnload(e) {
       if (hasContent() && !isDialogOpen) {
         e.preventDefault();
+        e.returnValue = ''; // Для некоторых браузеров
         isDialogOpen = true;
         leaveDialog.showModal();
       }
