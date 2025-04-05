@@ -5,6 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Написать отзыв</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px; /* Расстояние между полями */
+      max-width: 400px; /* Максимальная ширина формы */
+      margin: 0 auto; /* Центрируем форму */
+    }
+
+    input, textarea {
+      padding: 10px;
+      font-size: 16px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      background-color: #4CAF50; /* Зеленый фон */
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049; /* Темно-зеленый при наведении */
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -14,17 +44,17 @@
   <main>
     <form action="https://formsubmit.co/your-email@example.com" method="POST">
       <!-- Поля ввода с placeholder-ами согласно требованиям -->
-      <input type="text" id="name" name="name" placeholder="Ваше имя" required><br><br>
-      <input type="email" id="email" name="email" placeholder="Адрес электронной почты" required><br><br>
-      <textarea id="message" name="message" placeholder="Сообщение" required></textarea><br><br>
+      <input type="text" id="name" name="name" placeholder="Ваше имя" required>
+      <input type="email" id="email" name="email" placeholder="Адрес электронной почты" required>
+      <textarea id="message" name="message" placeholder="Сообщение" required></textarea>
       
       <input type="hidden" name="_next" value="thank-you.html">
       <input type="hidden" name="_captcha" value="false">
-      <!-- Кнопка отправки оформлена как ссылка -->
-      <button type="submit">Отправить</button>
+      <!-- Кнопка отправки теперь обычная кнопка -->
+      <button type="submit">Отправить форму</button>
     </form>
   </main>
-  
+
   <!-- Скрипт для кастомизации сообщений об ошибках с задержкой 0.5 сек -->
   <script>
     document.addEventListener('DOMContentLoaded', function(){
