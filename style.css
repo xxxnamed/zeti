@@ -8,12 +8,12 @@ body {
   color: #fff;
 }
 
-/* Стили для верхнего блока */
+/* Стили для верхнего блока (шапки) */
 header {
   /* Фон верхней надписи – темнее */
   background-color: #222;
   padding: 10px 0;
-  text-align: center; /* Только верхняя надпись по центру */
+  text-align: center; /* Только заголовок в шапке по центру */
 }
 
 header h1 {
@@ -62,5 +62,4 @@ input, textarea {
   color: red;
   font-size: 14px;
   display: none;
-  margin-top: 5px;
 }
