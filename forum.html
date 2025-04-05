@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="ru">
+<!DOCTYPE html>
+<html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -118,84 +119,98 @@
     <h1>Написать отзыв</h1>
   </header>
   <main>
-    <form id="feedback-form" action="https://formsubmit.co/your-email@example.com" method="POST">
-      <input type="text" id="name" name="name" placeholder="Ваше имя" required>
-      <input type="email" id="email" name="email" placeholder="Адрес электронной почты" required>
-      <textarea id="message" name="message" placeholder="Сообщение" required></textarea>
+    <form id="feedback-form" novalidate>
+      <input type="text" id="name" name="name" placeholder="Ваше имя">
+      <input type="email" id="email" name="email" placeholder="Адрес электронной почты">
+      <textarea id="message" name="message" placeholder="Сообщение"></textarea>
       <input type="hidden" name="_next" value="thank-you.html">
       <input type="hidden" name="_captcha" value="false">
       <div class="button-wrapper">
-        <button type="submit" oncopy="return false;" ondragstart="return false;" onselectstart="return false;">отправить</button>
+        <button type="submit">отправить</button>
       </div>
     </form>
   </main>
+
   <dialog id="leave-dialog">
     <p style="font-weight:bold">Покинуть эту страницу?</p>
     <p>Изменения могут не сохраниться</p>
     <div class="dialog-buttons">
-      <button class="stay-button" onclick="document.getElementById('leave-dialog').close()">Остаться</button>
+      <button class="stay-button" onclick="leaveDialog.close()">Остаться</button>
       <button class="leave-button" id="confirm-leave">Покинуть</button>
     </div>
   </dialog>
+
   <script>
     const form = document.getElementById('feedback-form');
     const fields = ['name', 'email', 'message'].map(id => document.getElementById(id));
-    let formChanged = false;const isValid = (field) => field.type === 'email' ? field.value.includes('@') : field.value.trim() !== '';
+    const leaveDialog = document.getElementById('leave-dialog');
+    let formChanged = false;
 
-fields.forEach(field => {
-  let lastValue = '';
-  field.addEventListener('input', () => {
-    if (!formChanged && field.value.trim() !== '') formChanged = true;
+    const isValid = field =>
+      field.type === 'email' ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value.trim()) : field.value.trim() !== '';
 
-    if (field.value.trim() === '') {
-      field.classList.add('soft-red');
-    } else {
-      field.classList.remove('soft-red');
+    fields.forEach(field => {
+      field.addEventListener('input', () => {
+        if (!formChanged && field.value.trim() !== '') formChanged = true;
+
+        if (field.value.trim() === '') {
+          field.classList.add('soft-red');
+        } else {
+          field.classList.remove('soft-red');
+        }
+      });
+
+      field.addEventListener('blur', () => {
+        if (field.value.trim() === '') {
+          field.classList.add('soft-red');
+        }
+      });
+    });
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      let valid = true;
+
+      fields.forEach(field => {
+        if (!isValid(field)) {
+          valid = false;
+          field.classList.remove('soft-red');
+          field.classList.add('strong-red');
+          setTimeout(() => {
+            field.classList.remove('strong-red');
+            field.classList.add('soft-red');
+          }, 1000);
+        }
+      });
+
+      if (valid) {
+        window.removeEventListener('beforeunload', handleBeforeUnload);
+        form.submit();
+      }
+    });
+
+    function hasContent() {
+      return fields.some(field => field.value.trim() !== '');
     }
-  });
 
-  field.addEventListener('blur', () => {
-    if (field.value.trim() === '') {
-      field.classList.add('soft-red');
+    function handleBeforeUnload(e) {
+      if (hasContent()) {
+        e.preventDefault();
+        e.returnValue = '';
+        if (!leaveDialog.open) {
+          leaveDialog.showModal();
+        }
+        return '';
+      }
     }
-  });
-});
 
-form.addEventListener('submit', function(e) {
-  let valid = true;
-  fields.forEach(field => {
-    if (!isValid(field)) {
-      valid = false;
-      field.classList.remove('soft-red');
-      field.classList.add('strong-red');
-      setTimeout(() => {
-        field.classList.remove('strong-red');
-        field.classList.add('soft-red');
-      }, 1000);
-    }
-  });
-  if (!valid) e.preventDefault();
-});
+    window.addEventListener('beforeunload', handleBeforeUnload);
 
-let shouldPrompt = () => fields.some(f => f.value.trim() !== '');
-let showDialog = false;
-
-window.addEventListener('beforeunload', function (e) {
-  if (shouldPrompt()) {
-    e.preventDefault();
-    document.getElementById('leave-dialog').showModal();
-    showDialog = true;
-    return '';
-  }
-});
-
-document.getElementById('confirm-leave').addEventListener('click', () => {
-  showDialog = false;
-  document.getElementById('leave-dialog').close();
-  window.removeEventListener('beforeunload', () => {});
-  location.reload();
-});
-
+    document.getElementById('confirm-leave').addEventListener('click', () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      leaveDialog.close();
+      location.href = 'about:blank';
+    });
   </script>
 </body>
 </html>
