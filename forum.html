@@ -145,6 +145,7 @@
     const fields = ['name', 'email', 'message'].map(id => document.getElementById(id));
     const leaveDialog = document.getElementById('leave-dialog');
     let formChanged = false;
+    let isDialogOpen = false;
 
     const isValid = field =>
       field.type === 'email' ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value.trim()) : field.value.trim() !== '';
@@ -179,7 +180,7 @@
           setTimeout(() => {
             field.classList.remove('strong-red');
             field.classList.add('soft-red');
-          }, 1000);
+          }, 500); // Плавный возврат цвета
         }
       });
 
@@ -194,13 +195,10 @@
     }
 
     function handleBeforeUnload(e) {
-      if (hasContent()) {
+      if (hasContent() && !isDialogOpen) {
         e.preventDefault();
-        e.returnValue = '';
-        if (!leaveDialog.open) {
-          leaveDialog.showModal();
-        }
-        return '';
+        isDialogOpen = true;
+        leaveDialog.showModal();
       }
     }
 
@@ -209,7 +207,12 @@
     document.getElementById('confirm-leave').addEventListener('click', () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
       leaveDialog.close();
+      isDialogOpen = false;
       location.href = 'about:blank';
+    });
+
+    leaveDialog.addEventListener('close', () => {
+      isDialogOpen = false;
     });
   </script>
 </body>
