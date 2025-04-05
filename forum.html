@@ -42,8 +42,12 @@
       box-sizing: border-box;
       border: 2px solid #ccc;
       border-radius: 8px;
-      transition: border-color 0.5s ease;
+      transition: border-color 0.3s ease;
       outline: none;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      box-shadow: none;
     }
     textarea {
       height: 150px;
@@ -55,9 +59,9 @@
       width: 100%;
     }
     button {
-      padding: 10px 16px;
-      font-size: 15px;
-      background-color: #e7f5ff; /* нежно голубой */
+      padding: 8px 16px;
+      font-size: 14px;
+      background-color: #e6f4ff; /* нежно-голубой */
       color: #000;
       border: none;
       border-radius: 8px;
@@ -66,10 +70,10 @@
       outline: none;
     }
     button:hover {
-      background-color: #d0ebff; /* немного темнее */
+      background-color: #cceaff; /* темнее */
     }
     button:active {
-      background-color: #bfe3ff;
+      background-color: #b3dfff;
       transform: scale(0.97);
     }
     button:focus {
@@ -83,14 +87,14 @@
     <h1>Написать отзыв</h1>
   </header>
   <main>
-    <form action="https://formsubmit.co/your-email@example.com" method="POST">
-      <input type="text" id="name" name="name" placeholder="Ваше имя" required>
-      <input type="email" id="email" name="email" placeholder="Адрес электронной почты" required>
-      <textarea id="message" name="message" placeholder="Сообщение" required></textarea>
-      
+    <form action="https://formsubmit.co/your-email@example.com" method="POST" novalidate>
+      <input type="text" id="name" name="name" placeholder="Ваше имя">
+      <input type="email" id="email" name="email" placeholder="Адрес электронной почты">
+      <textarea id="message" name="message" placeholder="Сообщение"></textarea>
+
       <input type="hidden" name="_next" value="thank-you.html">
       <input type="hidden" name="_captcha" value="false">
-      
+
       <div class="button-wrapper">
         <button type="submit">отправить</button>
       </div>
@@ -101,38 +105,38 @@
     document.addEventListener('DOMContentLoaded', function(){
       const form = document.querySelector('form');
       const fields = ['name', 'email', 'message'].map(id => document.getElementById(id));
-      const timers = {};
 
       fields.forEach(field => {
         field.addEventListener('input', () => {
-          clearTimeout(timers[field.id]);
-          timers[field.id] = setTimeout(() => {
-            if (!field.value.trim() || (field.type === 'email' && !field.value.includes('@'))) {
-              field.style.borderColor = "#ffcccc"; // нежно-красный
-            } else {
-              field.style.borderColor = "#ccc";
-            }
-          }, 500);
-        });
-
-        field.addEventListener('blur', () => {
-          if (!field.value.trim() || (field.type === 'email' && !field.value.includes('@'))) {
-            field.style.borderColor = "#ffcccc";
+          if (field.type === 'email') {
+            field.style.borderColor = field.value.includes('@') ? '#ccc' : '#ffcccc';
           } else {
-            field.style.borderColor = "#ccc";
+            field.style.borderColor = field.value.trim() ? '#ccc' : '#ffcccc';
           }
         });
       });
 
       form.addEventListener('submit', function(e){
+        e.preventDefault();
         let valid = true;
+
         fields.forEach(field => {
-          if (!field.value.trim() || (field.type === 'email' && !field.value.includes('@'))) {
-            field.style.borderColor = "#ffcccc";
+          const isEmpty = !field.value.trim();
+          const isEmail = field.type === 'email';
+          const isInvalidEmail = isEmail && !field.value.includes('@');
+
+          if (isEmpty || isInvalidEmail) {
+            field.style.borderColor = '#ff0000';
+            setTimeout(() => {
+              field.style.borderColor = '#ccc';
+            }, 1000);
             valid = false;
           }
         });
-        if (!valid) e.preventDefault();
+
+        if (valid) {
+          form.submit();
+        }
       });
     });
   </script>
