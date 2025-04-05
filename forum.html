@@ -80,14 +80,15 @@
     /* Новые анимации */
     @keyframes initialPulse {
       0% { border-color: #ffc0c0; }
-      50% { border-color: red; }
+      25% { border-color: red; }
+      75% { border-color: red; }
       100% { border-color: #ffc0c0; }
     }
 
     @keyframes validationPulse {
       0% { border-color: #ffc0c0; }
-      33% { border-color: red; }
-      66% { border-color: red; }
+      25% { border-color: red; }
+      75% { border-color: red; }
       100% { border-color: #ffc0c0; }
     }
 
@@ -203,6 +204,7 @@
           if (isFieldEmpty && isFieldNotChanged) {
             field.classList.add('initial-error');
           } else {
+            field.classList.add('soft-red');
             field.classList.add('validation-error');
           }
         }
@@ -217,7 +219,7 @@
     function handleBeforeUnload(e) {
       if (hasContent() && !isDialogOpen) {
         e.preventDefault();
-        e.returnValue = ''; // Для некоторых браузеров
+        e.returnValue = '';
         isDialogOpen = true;
         leaveDialog.showModal();
       }
