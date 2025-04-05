@@ -10,11 +10,32 @@
     <header>
         <h1>Рады приветствовать</h1>
     </header>
+    
     <main>
-        <p>Информация появится позже</p>
-        <a href="about.html">О проекте</a>
-        <br>
-        <a href="https://github.com/your-username/my-repository/releases" target="_blank">Скачать приложение</a>
+        <section class="content">
+            <p>Информация появится позже</p>
+            <a href="about.html">О проекте</a>
+            <br>
+            <a href="https://github.com/your-username/my-repository/releases" target="_blank">Скачать приложение</a>
+        </section>
+
+        <section class="contact-form">
+            <h2>Форма обратной связи</h2>
+            <form action="https://formsubmit.co/your-email@example.com" method="POST">
+                <label for="name">Имя:</label><br>
+                <input type="text" id="name" name="name" required><br><br>
+
+                <label for="email">Email:</label><br>
+                <input type="email" id="email" name="email" required><br><br>
+
+                <label for="message">Сообщение:</label><br>
+                <textarea id="message" name="message" required></textarea><br><br>
+
+                <input type="hidden" name="_next" value="https://your-website.com/thank-you.html">
+                <input type="hidden" name="_captcha" value="false">
+                <button type="submit">Отправить</button>
+            </form>
+        </section>
     </main>
 </body>
 </html>
