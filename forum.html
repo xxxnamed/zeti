@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Написать отзыв</title>
   <style>
-    /* Сбрасываем отступы, запрещаем скроллинг и задаем черный фон */
     html, body {
       margin: 0;
       padding: 0;
@@ -13,24 +12,22 @@
       overflow: hidden;
       background-color: #000;
     }
-    /* Стили для шапки */
     header {
       text-align: center;
       padding: 20px;
       background-color: #222;
       color: #fff;
     }
-    /* Центрирование формы по вертикали */
     main {
       display: flex;
       align-items: center;
       justify-content: center;
-      height: calc(100vh - 80px); /* вычитаем высоту шапки */
+      height: calc(100vh - 80px);
     }
     form {
       display: flex;
       flex-direction: column;
-      gap: 20px; /* расстояние между полями */
+      gap: 20px;
       max-width: 400px;
       width: 100%;
       padding: 20px;
@@ -44,8 +41,9 @@
       width: 100%;
       box-sizing: border-box;
       border: 2px solid #ccc;
-      border-radius: 8px; /* более гладкие края */
+      border-radius: 8px;
       transition: border-color 0.5s ease;
+      outline: none;
     }
     textarea {
       height: 150px;
@@ -57,33 +55,35 @@
       width: 100%;
     }
     button {
-      padding: 12px 20px;
-      font-size: 16px;
-      background-color: #4CAF50;
-      color: white;
+      padding: 10px 16px;
+      font-size: 15px;
+      background-color: #e7f5ff; /* нежно голубой */
+      color: #000;
       border: none;
-      border-radius: 8px; /* более гладкие края */
+      border-radius: 8px;
       cursor: pointer;
-      width: 100%;
       transition: background-color 0.3s ease, transform 0.1s ease;
+      outline: none;
     }
     button:hover {
-      background-color: #45a049;
+      background-color: #d0ebff; /* немного темнее */
     }
     button:active {
-      background-color: #3e8e41;
-      transform: scale(0.98);
+      background-color: #bfe3ff;
+      transform: scale(0.97);
+    }
+    button:focus {
+      outline: none;
+      box-shadow: none;
     }
   </style>
 </head>
 <body>
   <header>
-    <!-- Шапка с заголовком страницы формы -->
     <h1>Написать отзыв</h1>
   </header>
   <main>
     <form action="https://formsubmit.co/your-email@example.com" method="POST">
-      <!-- Поля ввода с placeholder-ами -->
       <input type="text" id="name" name="name" placeholder="Ваше имя" required>
       <input type="email" id="email" name="email" placeholder="Адрес электронной почты" required>
       <textarea id="message" name="message" placeholder="Сообщение" required></textarea>
@@ -91,81 +91,48 @@
       <input type="hidden" name="_next" value="thank-you.html">
       <input type="hidden" name="_captcha" value="false">
       
-      <!-- Обертка для кнопки отправки формы -->
       <div class="button-wrapper">
         <button type="submit">отправить</button>
       </div>
     </form>
   </main>
 
-  <!-- Скрипт для плавного изменения цвета рамки поля при отсутствии ввода с задержкой 0.5 сек -->
   <script>
     document.addEventListener('DOMContentLoaded', function(){
-      let form = document.querySelector('form');
-      let nameField = document.getElementById('name');
-      let emailField = document.getElementById('email');
-      let messageField = document.getElementById('message');
+      const form = document.querySelector('form');
+      const fields = ['name', 'email', 'message'].map(id => document.getElementById(id));
+      const timers = {};
 
-      // Таймеры для задержки проверки (0.5 секунды)
-      let timers = { name: null, email: null, message: null };
+      fields.forEach(field => {
+        field.addEventListener('input', () => {
+          clearTimeout(timers[field.id]);
+          timers[field.id] = setTimeout(() => {
+            if (!field.value.trim() || (field.type === 'email' && !field.value.includes('@'))) {
+              field.style.borderColor = "#ffcccc"; // нежно-красный
+            } else {
+              field.style.borderColor = "#ccc";
+            }
+          }, 500);
+        });
 
-      function validateField(field, timerKey) {
-        clearTimeout(timers[timerKey]);
-        timers[timerKey] = setTimeout(function(){
-          if (!field.value.trim() || (field.id === 'email' && !field.value.includes('@'))) {
-            showError(field);
+        field.addEventListener('blur', () => {
+          if (!field.value.trim() || (field.type === 'email' && !field.value.includes('@'))) {
+            field.style.borderColor = "#ffcccc";
           } else {
-            hideError(field);
+            field.style.borderColor = "#ccc";
           }
-        }, 500);
-      }
-
-      function showError(field) {
-        field.style.borderColor = "#ff9999"; // нежное красное
-      }
-
-      function hideError(field) {
-        field.style.borderColor = "#ccc"; // исходный цвет рамки
-      }
-
-      // Вешаем обработчики событий input и blur для корректной валидации
-      nameField.addEventListener('input', function(){
-        validateField(nameField, 'name');
-      });
-      emailField.addEventListener('input', function(){
-        validateField(emailField, 'email');
-      });
-      messageField.addEventListener('input', function(){
-        validateField(messageField, 'message');
-      });
-      
-      nameField.addEventListener('blur', function(){
-        validateField(nameField, 'name');
-      });
-      emailField.addEventListener('blur', function(){
-        validateField(emailField, 'email');
-      });
-      messageField.addEventListener('blur', function(){
-        validateField(messageField, 'message');
+        });
       });
 
       form.addEventListener('submit', function(e){
         let valid = true;
-        if (!nameField.value.trim()) {
-          showError(nameField);
-          valid = false;
-        }
-        if (!emailField.value.trim() || !emailField.value.includes('@')) {
-          showError(emailField);
-          valid = false;
-        }
-        if (!messageField.value.trim()) {
-          showError(messageField);
-          valid = false;
-        }
-        if (!valid) {
-          e.preventDefault();
-        }
+        fields.forEach(field => {
+          if (!field.value.trim() || (field.type === 'email' && !field.value.includes('@'))) {
+            field.style.borderColor = "#ffcccc";
+            valid = false;
+          }
+        });
+        if (!valid) e.preventDefault();
       });
     });
   </script>
