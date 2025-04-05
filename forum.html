@@ -6,6 +6,21 @@
   <title>Написать отзыв</title>
   <link rel="stylesheet" href="style.css">
   <style>
+    /* Сбрасываем отступы и запрещаем скроллинг */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow: hidden;
+      background-color: #f0f0f0;
+    }
+    /* Стили для шапки */
+    header {
+      text-align: center;
+      padding: 20px;
+      background-color: #222;
+      color: #fff;
+    }
     /* Центрирование формы по вертикали */
     main {
       display: flex;
@@ -31,7 +46,7 @@
       box-sizing: border-box;
       border: 2px solid #ccc;
       border-radius: 4px;
-      transition: border-color 1s ease;
+      transition: border-color 0.5s ease;
     }
     textarea {
       height: 150px;
@@ -65,7 +80,7 @@
   </header>
   <main>
     <form action="https://formsubmit.co/your-email@example.com" method="POST">
-      <!-- Поля ввода с placeholder-ами согласно требованиям -->
+      <!-- Поля ввода с placeholder-ами -->
       <input type="text" id="name" name="name" placeholder="Ваше имя" required>
       <input type="email" id="email" name="email" placeholder="Адрес электронной почты" required>
       <textarea id="message" name="message" placeholder="Сообщение" required></textarea>
@@ -80,7 +95,7 @@
     </form>
   </main>
 
-  <!-- Скрипт для плавного изменения цвета рамки поля при отсутствии ввода с задержкой 1 сек -->
+  <!-- Скрипт для плавного изменения цвета рамки поля при отсутствии ввода с задержкой 0.5 сек -->
   <script>
     document.addEventListener('DOMContentLoaded', function(){
       let form = document.querySelector('form');
@@ -88,7 +103,7 @@
       let emailField = document.getElementById('email');
       let messageField = document.getElementById('message');
 
-      // Таймеры для задержки проверки (1 секунда)
+      // Таймеры для задержки проверки (0.5 секунды)
       let timers = { name: null, email: null, message: null };
 
       function validateField(field, timerKey) {
@@ -99,7 +114,7 @@
           } else {
             hideError(field);
           }
-        }, 1000);
+        }, 500);
       }
 
       function showError(field) {
