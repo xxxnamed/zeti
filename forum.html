@@ -9,25 +9,37 @@
     form {
       display: flex;
       flex-direction: column;
-      gap: 15px; /* Расстояние между полями */
+      gap: 20px; /* Увеличено расстояние между полями */
       max-width: 400px; /* Максимальная ширина формы */
       margin: 0 auto; /* Центрируем форму */
     }
 
     input, textarea {
-      padding: 10px;
+      padding: 12px;
       font-size: 16px;
       width: 100%;
       box-sizing: border-box;
     }
 
+    textarea {
+      height: 150px; /* Добавлена высота для текстового поля */
+      resize: vertical; /* Можно изменять размер только по вертикали */
+    }
+
+    .button-wrapper {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
     button {
-      padding: 10px 15px;
+      padding: 12px 20px;
       font-size: 16px;
       background-color: #4CAF50; /* Зеленый фон */
       color: white;
       border: none;
       cursor: pointer;
+      width: 100%; /* Кнопка будет растягиваться на всю ширину */
       transition: background-color 0.3s ease;
     }
 
@@ -50,8 +62,11 @@
       
       <input type="hidden" name="_next" value="thank-you.html">
       <input type="hidden" name="_captcha" value="false">
-      <!-- Кнопка отправки теперь обычная кнопка -->
-      <button type="submit">Отправить форму</button>
+      
+      <!-- Обертка для кнопки отправки формы -->
+      <div class="button-wrapper">
+        <button type="submit">Отправить форму</button>
+      </div>
     </form>
   </main>
 
