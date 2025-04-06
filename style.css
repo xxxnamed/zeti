@@ -1,28 +1,37 @@
+/* Структура для прижатого футера */
+html, body {
+  height: 100%;
+}
+
+.wrapper {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 /* Основные стили страницы */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  /* Фон ниже верхней надписи полностью чёрный */
   background-color: #000;
   color: #fff;
 }
 
 /* Стили для верхнего блока (шапки) */
 header {
-  /* Фон верхней надписи – темнее */
   background-color: #222;
   padding: 10px 0;
-  text-align: center; /* Только заголовок в шапке по центру */
+  text-align: center;
 }
 
 header h1 {
-  font-size: 24px; /* Более мелкий шрифт для надписи */
+  font-size: 24px;
   margin: 0;
 }
 
-/* Основной контент выравнивается по левому краю */
 main {
+  flex: 1;
   margin: 20px;
   text-align: left;
 }
@@ -37,7 +46,6 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Оформление кнопки отправки как ссылки */
 button[type="submit"] {
   background: none;
   border: none;
@@ -48,7 +56,6 @@ button[type="submit"] {
   padding: 0;
 }
 
-/* Стили для полей ввода и текстовой области */
 input, textarea {
   width: 100%;
   padding: 12px;
@@ -60,26 +67,22 @@ input, textarea {
   transition: border-color 0.5s ease;
 }
 
-/* Стиль для мягкого красного цвета */
 .soft-red {
   border-color: #ffc0c0 !important;
   transition: border-color 0.5s ease;
 }
 
-/* Стиль для сильного красного цвета */
 .strong-red {
   border-color: red !important;
   transition: border-color 0.5s ease;
 }
 
-/* Стили для сообщения об ошибке */
 .error-message {
   color: red;
   font-size: 14px;
   display: none;
 }
 
-/* Стиль для диалогового окна */
 dialog::backdrop {
   background: rgba(0, 0, 0, 0.5);
 }
