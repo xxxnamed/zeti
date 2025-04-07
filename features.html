@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Функционал приложения</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #ffd700;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        nav {
+            background-color: #ffd700;
+            padding: 10px 0;
+            text-align: center;
+        }
+        nav a {
+            color: #000;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .feature {
+            width: 30%;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .feature img {
+            max-width: 100%;
+            height: auto;
+            background-color: #333;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #ffd700;
+            color: #000;
+        }
+        @media (max-width: 768px) {
+            .feature {
+                width: 100%;
+            }
+            nav a {
+                display: block;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">Главная</a>
+        <a href="features.html">Функционал</a>
+        <a href="premium.html">Премиум</a>
+        <a href="support.html">Поддержка</a>
+        <a href="privacy.html">Конфиденциальность</a>
+        <a href="blog.html">Блог</a>
+        <a href="account.html">Личный кабинет</a>
+    </nav>
+    <div class="container">
+        <h1>Возможности приложения</h1>
+        <div class="features">
+            <div class="feature">
+                <h3>Уведомления о заходе/выходе</h3>
+                <p>Получайте уведомления, когда пользователь заходит или выходит из сети.</p>
+                <img src="screenshot1.png" alt="Уведомления">
+            </div>
+            <div class="feature">
+                <h3>Отслеживание действий</h3>
+                <p>Следите за изменениями статуса пользователя.</p>
+                <img src="screenshot2.png" alt="Отслеживание">
+            </div>
+            <div class="feature">
+                <h3>Настройки бота</h3>
+                <p>Включайте или выключайте бота по вашему усмотрению.</p>
+                <img src="screenshot3.png" alt="Настройки">
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2023 Мониторинг активности в Telegram. Все права защищены.</p>
+    </footer>
+</body>
+</html>
